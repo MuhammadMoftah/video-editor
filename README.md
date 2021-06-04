@@ -25,3 +25,6 @@ npm run serve
 ```
 npm run build
 ```
+
+### App live link
+https://friendly-kirch-95e1d7.netlify.app/
