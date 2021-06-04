@@ -1,5 +1,10 @@
 <template>
-  <div id="app" style="padding-bottom: 50px">
+  <div id="app">
+    <!-- loader  -->
+    <div class="spinner" v-if="loader">
+      <img src="./assets/spinner.gif" width="150px" alt="" />
+    </div>
+
     <!-- Error section -->
     <transition name="fade" appear>
       <div class="error" v-if="error == 'size'">
@@ -136,12 +141,12 @@ export default {
       videoTitle: "",
       titleColor: "#ffffff",
       error: false,
+      loader: false,
     };
   },
   methods: {
     changeVideo(event) {
       this.file = event.target.files[0];
-      console.log("size", event.target.files[0].size);
       if (this.file.size > 500000000) {
         this.error = "size";
 
@@ -160,20 +165,33 @@ export default {
       }
 
       this.error = false;
+      this.loader = true;
+
       const file = URL.createObjectURL(event.target.files[0]);
       this.videoSrc = file;
       setTimeout(() => {
         this.OriginalHeight = document.getElementById("video").clientHeight;
         this.OriginalWidth = document.getElementById("video").clientWidth;
-      }, 500);
+
+        // if video have a large hight
+        if (this.OriginalHeight > 600) {
+          const oldHeight = this.OriginalHeight;
+          this.OriginalHeight = 600;
+          const newWidth = (this.OriginalWidth * 600) / oldHeight;
+
+          this.OriginalWidth = newWidth;
+          this.original();
+        }
+        this.loader = false;
+      }, 1500);
     },
     square() {
       // console.log(this.$refs.video.clientWidth);
       // console.log(this.$refs.video.clientHeight);
       console.log(document.getElementById("video").clientWidth);
       console.log(document.getElementById("video").clientHeight);
-      this.$refs.video.style.width = this.OriginalHeight + "px";
-      this.$refs.video.style.height = this.OriginalHeight + "px";
+      this.$refs.video.style.width = this.OriginalWidth + "px";
+      this.$refs.video.style.height = this.OriginalWidth + "px";
     },
     original() {
       this.$refs.video.style.width = this.OriginalWidth + "px";
@@ -206,13 +224,7 @@ input[type="text"] {
 input:hover {
   background: rgb(247, 247, 247);
 }
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -221,6 +233,22 @@ input:hover {
   /* font-family: 'Dancing Script', cursive; */
 }
 
+.spinner {
+  width: 100%;
+  text-align: center;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  background: white;
+}
+.spinner img {
+  margin: auto;
+}
 .container {
   width: 100%;
   max-width: 800px;
@@ -257,7 +285,7 @@ input:hover {
   border-radius: 10px;
   display: block;
   margin: auto;
-  margin-top: 27vh;
+  margin-top: 29vh;
   width: fit-content;
 }
 .upload-section label:hover {
@@ -283,6 +311,7 @@ input:hover {
   color: white;
   font-size: 20px;
   text-shadow: 1px 1px 1px black;
+  pointer-events: none;
 }
 .title-color {
   border: 1px solid #ababab;
