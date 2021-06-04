@@ -97,7 +97,7 @@
               src="./assets/saturation.png"
               style="vertical-align: sub"
             />
-            Saturationn
+            Saturation
           </div>
 
           <input
