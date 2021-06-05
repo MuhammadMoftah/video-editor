@@ -188,8 +188,8 @@ export default {
     square() {
       // console.log(this.$refs.video.clientWidth);
       // console.log(this.$refs.video.clientHeight);
-      console.log(document.getElementById("video").clientWidth);
-      console.log(document.getElementById("video").clientHeight);
+      // console.log(document.getElementById("video").clientWidth);
+      // console.log(document.getElementById("video").clientHeight);
       this.$refs.video.style.width = this.OriginalWidth + "px";
       this.$refs.video.style.height = this.OriginalWidth + "px";
     },
@@ -298,6 +298,7 @@ input:hover {
   width: 100%;
   border-radius: 8px;
   background: black;
+  max-width: 100%;
 }
 .overlay {
   position: absolute;
